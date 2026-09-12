@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shipment Delivered — Happy Birthday Ninaad!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #06040f;
+  --bg-card: rgba(255,255,255,.03);
+  --border-glass: rgba(255,255,255,.07);
+  --text-hero: #fff;
+  --text-body: rgba(255,255,255,.75);
+  --text-dim: rgba(255,255,255,.35);
+  --accent-1: #a78bfa;
+  --accent-2: #f472b6;
+  --accent-3: #fb923c;
+  --accent-4: #34d399;
+  --glow-purple: rgba(139,92,246,.25);
+  --glow-pink: rgba(236,72,153,.2);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-deep);
+  color: var(--text-body);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+canvas#bg { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+.intro-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background: var(--bg-deep);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  cursor:pointer;
+  transition: opacity .8s cubic-bezier(.4,0,.2,1), visibility .8s;
+}
+.intro-overlay.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+.intro-overlay .tracking-id {
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; color:var(--text-dim);
+  letter-spacing:3px; margin-bottom:32px;
+  text-transform:uppercase;
+  animation: fadeUp .8s .2s both;
+}
+.intro-overlay .package-icon {
+  width:120px; height:120px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  border-radius: 24px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:56px;
+  box-shadow: 0 0 80px var(--glow-purple), 0 0 160px var(--glow-pink);
+  animation: float 3s ease-in-out infinite, fadeUp .8s .4s both;
+  position:relative;
+}
+.intro-overlay .package-icon::after {
+  content:''; position:absolute; inset:-3px;
+  border-radius:27px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  z-index:-1; opacity:.5;
+  animation: spin 4s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.intro-overlay .open-text {
+  margin-top:36px;
+  font-size:14px; color:var(--text-dim);
+  letter-spacing:4px; text-transform:uppercase;
+  animation: fadeUp .8s .6s both, pulse2 2s 1.4s ease-in-out infinite;
+}
+@keyframes pulse2 { 0%,100%{opacity:.35} 50%{opacity:.7} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.page {
+  position:relative; z-index:1;
+  max-width:520px; margin:0 auto;
+  padding:0 20px;
+  opacity:0; transform:translateY(30px);
+  transition: opacity 1s .3s, transform 1s .3s;
+}
+.page.visible { opacity:1; transform:translateY(0); }
+
+.status-bar {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(16,185,129,.08);
+  border:1px solid rgba(16,185,129,.2);
+  border-radius:100px; padding:8px 20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; color:#6ee7b7;
+  letter-spacing:1px;
+  margin:60px auto 48px; text-align:center;
+  width:fit-content;
+}
+.status-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:#10b981;
+  box-shadow: 0 0 12px #10b981;
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero { text-align:center; margin-bottom:64px; }
+.hero-emoji {
+  font-size:72px; margin-bottom:20px;
+  display:inline-block;
+  animation: wobble 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(251,146,60,.3));
+}
+@keyframes wobble { 0%,100%{transform:rotate(0) scale(1)} 25%{transform:rotate(-10deg) scale(1.05)} 75%{transform:rotate(10deg) scale(1.05)} }
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,10vw,56px);
+  font-weight:900; line-height:1.05;
+  color:var(--text-hero);
+  margin-bottom:12px;
+}
+.hero h1 span {
+  display:block;
+  background:linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200% 200%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+.hero .tagline {
+  font-size:15px; color:var(--text-dim);
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:.5px;
+}
+
+.card {
+  background: var(--bg-card);
+  border:1px solid var(--border-glass);
+  border-radius:20px;
+  padding:28px 24px;
+  margin-bottom:24px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  position:relative;
+  overflow:hidden;
+  opacity:0; transform:translateY(40px);
+  transition: opacity .7s, transform .7s;
+}
+.card.visible { opacity:1; transform:translateY(0); }
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+}
+.card-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:2.5px;
+  color:var(--text-dim); text-transform:uppercase;
+  margin-bottom:20px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-label::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(255,255,255,.08), transparent);
+}
+
+.receipt-row {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.receipt-row:last-child { border:none; }
+.receipt-key { color:var(--text-dim); font-size:13px; }
+.receipt-val {
+  color:var(--text-hero); font-weight:600;
+  font-size:13px; text-align:right; max-width:55%;
+}
+.receipt-val.mono {
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+}
+.receipt-val.accent { color:var(--accent-1); }
+.receipt-total {
+  margin-top:16px; padding-top:16px;
+  border-top:1px dashed rgba(255,255,255,.1);
+  display:flex; justify-content:space-between;
+  align-items:baseline;
+}
+.receipt-total .receipt-key { font-size:14px; font-weight:600; color:var(--text-body); }
+.receipt-total .receipt-val {
+  font-size:20px; font-weight:700;
+  background:linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.item-showcase {
+  display:flex; align-items:center; gap:18px;
+  padding:4px 0;
+}
+.item-img {
+  width:72px; height:72px;
+  background:linear-gradient(135deg, rgba(139,92,246,.15), rgba(236,72,153,.1));
+  border:1px solid rgba(139,92,246,.15);
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; flex-shrink:0;
+}
+.item-details h3 {
+  font-size:18px; font-weight:700; color:var(--text-hero);
+  margin-bottom:2px;
+}
+.item-details .subtitle {
+  font-size:12px; color:var(--accent-2);
+  font-style:italic; margin-bottom:6px;
+}
+.item-details .tags {
+  display:flex; gap:6px; flex-wrap:wrap;
+}
+.tag {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:.5px;
+  padding:3px 10px; border-radius:100px;
+  background:rgba(167,139,250,.08);
+  border:1px solid rgba(167,139,250,.15);
+  color:var(--accent-1);
+}
+.tag.green {
+  background:rgba(52,211,153,.08);
+  border-color:rgba(52,211,153,.15);
+  color:var(--accent-4);
+}
+.tag.orange {
+  background:rgba(251,146,60,.08);
+  border-color:rgba(251,146,60,.15);
+  color:var(--accent-3);
+}
+
+.message-body {
+  font-size:15.5px; line-height:1.85;
+  color:var(--text-body);
+}
+.message-body strong { color:var(--text-hero); font-weight:600; }
+.message-body em { color:var(--accent-2); font-style:italic; }
+.message-body .highlight {
+  display:inline;
+  background:linear-gradient(135deg, rgba(139,92,246,.12), rgba(236,72,153,.08));
+  padding:2px 8px; border-radius:6px;
+  border:1px solid rgba(139,92,246,.1);
+}
+.emoji-burst {
+  font-size:36px; text-align:center;
+  letter-spacing:12px; padding:20px 0 8px;
+}
+
+.roles-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.role-card {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:14px; padding:16px;
+  text-align:center;
+  transition: transform .3s, border-color .3s;
+}
+.role-card:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.12); }
+.role-emoji { font-size:28px; margin-bottom:8px; }
+.role-name {
+  font-size:14px; font-weight:600; color:var(--text-hero);
+  margin-bottom:2px;
+}
+.role-title {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; color:var(--text-dim);
+  letter-spacing:1px; text-transform:uppercase;
+}
+
+.handling-list { list-style:none; }
+.handling-list li {
+  position:relative;
+  padding:10px 0 10px 28px;
+  font-size:13px; line-height:1.6;
+  border-bottom:1px solid rgba(255,255,255,.03);
+  color:var(--text-body);
+}
+.handling-list li:last-child { border:none; }
+.handling-list li::before {
+  content:'';
+  position:absolute; left:0; top:14px;
+  width:14px; height:14px;
+  border:1.5px solid var(--accent-3);
+  border-radius:3px;
+}
+.handling-list li::after {
+  content:'';
+  position:absolute; left:3px; top:18px;
+  width:8px; height:5px;
+  border-left:1.5px solid var(--accent-3);
+  border-bottom:1.5px solid var(--accent-3);
+  transform:rotate(-45deg);
+}
+
+.sign-off {
+  text-align:center;
+  padding:48px 0 80px;
+  opacity:0; transform:translateY(30px);
+  transition: opacity .7s, transform .7s;
+}
+.sign-off.visible { opacity:1; transform:translateY(0); }
+.sign-off .hearts {
+  font-size:24px; letter-spacing:8px;
+  margin-bottom:20px; display:block;
+  filter: drop-shadow(0 0 20px rgba(244,114,182,.4));
+}
+.sign-off .from {
+  font-family:'Playfair Display',serif;
+  font-size:28px; font-weight:800;
+  color:var(--text-hero);
+  margin-bottom:6px;
+}
+.sign-off .co-name {
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; color:var(--text-dim);
+  letter-spacing:2px; text-transform:uppercase;
+}
+.sign-off .pkg-id {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; color:rgba(255,255,255,.12);
+  letter-spacing:1px; margin-top:24px;
+}
+
+.confetti-container { position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
+.confetti-piece {
+  position:absolute; top:-20px;
+  opacity:0;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform:translateY(0) rotate(0deg) scale(1); opacity:1; }
+  80% { opacity:.8; }
+  100% { transform:translateY(110vh) rotate(1080deg) scale(.3); opacity:0; }
+}
+
+.scroll-hint {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  z-index:2;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px; color:var(--text-dim);
+  letter-spacing:2px;
+  display:flex; flex-direction:column;
+  align-items:center; gap:6px;
+  opacity:0; transition: opacity .5s;
+}
+.scroll-hint.visible { opacity:1; }
+.scroll-hint .arrow {
+  width:20px; height:20px;
+  border-right:1.5px solid var(--text-dim);
+  border-bottom:1.5px solid var(--text-dim);
+  transform:rotate(45deg);
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce { 0%,100%{transform:translateY(0) rotate(45deg)} 50%{transform:translateY(6px) rotate(45deg)} }
+
+@media(max-width:400px){
+  .roles-grid { grid-template-columns:1fr; }
+  .hero h1 { font-size:34px; }
+  .card { padding:20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="confetti-container" id="confetti"></div>
+
+<div class="intro-overlay" id="intro">
+  <div class="tracking-id">Tracking #BFF-2022-001</div>
+  <div class="package-icon">🎁</div>
+  <div class="open-text">Tap to open shipment</div>
+</div>
+
+<div class="scroll-hint" id="scrollHint">
+  <span>Scroll</span>
+  <div class="arrow"></div>
+</div>
+
+<div class="page" id="page">
+
+  <div class="status-bar">
+    <span class="status-dot"></span>
+    SHIPMENT DELIVERED
+  </div>
+
+  <section class="hero">
+    <div class="hero-emoji">🍦</div>
+    <h1>Happy Birthday,<br><span>Ninaad!</span></h1>
+    <p class="tagline">Order #BFF-2022-001 successfully fulfilled</p>
+  </section>
+
+  <div class="card" data-reveal>
+    <div class="card-label">Fulfillment receipt</div>
+    <div class="receipt-row">
+      <span class="receipt-key">Order placed</span>
+      <span class="receipt-val mono">2022 (friendship initiated)</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-key">SKU</span>
+      <span class="receipt-val mono accent">JOY-INFINITE</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-key">Hazmat classification</span>
+      <span class="receipt-val">Brain Freeze</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-key">SLA</span>
+      <span class="receipt-val">Same-Day Smile (P1)</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-key">Carrier</span>
+      <span class="receipt-val">Hand-Delivered with Love</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-key">Wave</span>
+      <span class="receipt-val mono">BDAY-2026</span>
+    </div>
+    <div class="receipt-total">
+      <span class="receipt-key">Total love shipped</span>
+      <span class="receipt-val">Unlimited</span>
+    </div>
+  </div>
+
+  <div class="card" data-reveal>
+    <div class="card-label">Item manifest</div>
+    <div class="item-showcase">
+      <div class="item-img">🥷</div>
+      <div class="item-details">
+        <h3>Ninja Creami</h3>
+        <div class="subtitle">"It's healthy, I swear" machine</div>
+        <div class="tags">
+          <span class="tag">Qty: 1</span>
+          <span class="tag green">Joy: Infinite</span>
+          <span class="tag orange">Calories: Denied</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-reveal>
+    <div class="card-label">Production crew assignment</div>
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-emoji">🎂</div>
+        <div class="role-name">Ninaad</div>
+        <div class="role-title">Chief Creami Officer</div>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">👩‍🍳</div>
+        <div class="role-name">Harshida</div>
+        <div class="role-title">Flavor Ops Lead</div>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">⭐</div>
+        <div class="role-name">Reya</div>
+        <div class="role-title">QC Inspector — Toppings</div>
+      </div>
+      <div class="role-card">
+        <div class="role-emoji">🌟</div>
+        <div class="role-name">Raahi</div>
+        <div class="role-title">QC Inspector — Scoops</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-reveal>
+    <div class="card-label">Personal dispatch note</div>
+    <div class="emoji-burst">🎂 🥳 🎁</div>
+    <div class="message-body">
+      <strong>Dear Ninaad,</strong><br><br>
+      We ran a full cycle count on our feelings and the audit confirms it — you're one of the best humans we've ever had in inventory. Zero shrinkage, 100% fill rate, always in stock when it counts.<br><br>
+      This Ninja Creami is officially your license to call ice cream a <em>health food</em>. Protein ice cream? <span class="highlight">That's basically a gym session.</span> Frozen fruit blend? <em>That's a smoothie with commitment issues.</em> Frozen yogurt at midnight? <em>That's just meal planning.</em><br><br>
+      We fully expect Reya and Raahi to submit daily demand forecasts for scoops, and Harshida to manage the production schedule with the precision of a true warehouse ops lead.<br><br>
+      May your throughput of joy always be high, your cycle time to happiness forever low, and your freezer never hit max capacity.<br><br>
+      <strong>Happy Birthday, buddy. Here's to many more waves of friendship.</strong>
+    </div>
+  </div>
+
+  <div class="card" data-reveal>
+    <div class="card-label">Handling instructions</div>
+    <ul class="handling-list">
+      <li>All love shipments are final sale — no returns, no RMA, no chargebacks</li>
+      <li>Calories from the Ninja Creami are tax-exempt (we had finance verify)</li>
+      <li>If anyone says "that's not real ice cream" — that's a picking error in their logic</li>
+      <li>Reya & Raahi have first-right-of-refusal on all toppings and taste tests</li>
+      <li>This friendship has no expiry date — it's a perpetual inventory item</li>
+    </ul>
+  </div>
+
+  <div class="sign-off" data-reveal id="signoff">
+    <span class="hearts">❤️ ❤️ ❤️</span>
+    <div class="from">Bhupi & Jasmine</div>
+    <div class="co-name">Friendship Fulfillment Co. — Est. 2022</div>
+    <div class="pkg-id">PKG-LOVE-2026 · BATCH-BIRTHDAY · LOT#BEST-FRIENDS-FOREVER · NO-RMA</div>
+  </div>
+
+</div>
+
+<script>
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [];
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+class Star {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 1.4 + .3;
+    this.speed = Math.random() * .15 + .02;
+    this.opacity = Math.random() * .6 + .1;
+    this.pulse = Math.random() * Math.PI * 2;
+    this.pulseSpeed = Math.random() * .02 + .005;
+    const colors = ['167,139,250', '244,114,182', '251,146,60', '52,211,153'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+  update() {
+    this.y += this.speed;
+    this.pulse += this.pulseSpeed;
+    if (this.y > H + 10) { this.y = -10; this.x = Math.random() * W; }
+  }
+  draw() {
+    const o = this.opacity * (.6 + Math.sin(this.pulse) * .4);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${o})`;
+    ctx.fill();
+    if (this.r > 1) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color},${o * .15})`;
+      ctx.fill();
+    }
+  }
+}
+for (let i = 0; i < 120; i++) stars.push(new Star());
+function animStars() {
+  ctx.clearRect(0, 0, W, H);
+  stars.forEach(s => { s.update(); s.draw(); });
+  requestAnimationFrame(animStars);
+}
+animStars();
+
+const intro = document.getElementById('intro');
+const page = document.getElementById('page');
+const scrollHint = document.getElementById('scrollHint');
+let opened = false;
+intro.addEventListener('click', openPackage);
+intro.addEventListener('touchend', openPackage);
+function openPackage(e) {
+  if (opened) return;
+  opened = true;
+  e.preventDefault();
+  intro.classList.add('hidden');
+  setTimeout(() => {
+    page.classList.add('visible');
+    launchConfetti();
+    setTimeout(() => scrollHint.classList.add('visible'), 1500);
+  }, 400);
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  const colors = ['#a78bfa','#f472b6','#fb923c','#34d399','#60a5fa','#fbbf24','#f87171','#c084fc'];
+  for (let i = 0; i < 100; i++) {
+    const el = document.createElement('div');
+    el.classList.add('confetti-piece');
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    const size = 6 + Math.random() * 10;
+    const shape = Math.random();
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDuration = (2.5 + Math.random() * 3) + 's';
+    el.style.animationDelay = (Math.random() * 1.5) + 's';
+    if (shape < .33) {
+      el.style.width = size + 'px'; el.style.height = size + 'px';
+      el.style.background = c; el.style.borderRadius = '50%';
+    } else if (shape < .66) {
+      el.style.width = size + 'px'; el.style.height = size * .6 + 'px';
+      el.style.background = c; el.style.borderRadius = '2px';
+    } else {
+      el.style.width = '0'; el.style.height = '0';
+      el.style.borderLeft = size/2 + 'px solid transparent';
+      el.style.borderRight = size/2 + 'px solid transparent';
+      el.style.borderBottom = size + 'px solid ' + c;
+    }
+    container.appendChild(el);
+  }
+  setTimeout(() => container.innerHTML = '', 7000);
+}
+
+const reveals = document.querySelectorAll('[data-reveal]');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => io.observe(el));
+
+let scrolled = false;
+window.addEventListener('scroll', () => {
+  if (!scrolled && window.scrollY > 100) {
+    scrolled = true;
+    scrollHint.classList.remove('visible');
+  }
+});
+</script>
+</body>
+</html>
